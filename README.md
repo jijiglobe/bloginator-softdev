@@ -13,11 +13,11 @@ Bloginator Assignment for Software Development Class
 
 ## Checklist
 
- -[ ] Backend Completion By 10-13-15
- -[ ] Middleware Completion By 10-13-15
- -[ ] UX Completion By 10-14-15
- -[ ] Beta Test Day, Bug fixes, code cleanup, etc. 10-15-15
- -[ ] Deploy!
+    - [ ] Backend Completion By 10-13-15
+    - [ ] Middleware Completion By 10-13-15
+    - [ ] UX Completion By 10-14-15
+    - [ ] Beta Test Day, Bug fixes, code cleanup, etc. 10-15-15
+    - [ ] Deploy!
 
 ## Using the project
 
