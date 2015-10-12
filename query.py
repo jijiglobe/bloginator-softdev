@@ -1,3 +1,4 @@
+
 import sqlite3
 
 conn = sqlite3.connect("blog.db")
@@ -23,8 +24,18 @@ def uPost(uid):
     result = c.execute(userPosts);
     for r in result:
         print (r)
-
+def comments(pid):
+    postComments ="""
+    SELECT user.name, comment.content 
+    FROM post,comment,user
+    WHERE comment.uid = user.uid and comment.pid = post.pid and comment.pid =
+    """+ str(pid)
+    result = c.execute(postComments)
+    for r in result:
+        print (r)
 
 aPost()
 print ("\n\nUserposts")
 uPost(2)
+print ("\n\nPostcomments")
+comments(1)
