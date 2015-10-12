@@ -14,3 +14,6 @@ q ="CREATE TABLE comment(cid integer, pid integer, uid integer, content text)"
 c.execute(q)
 
 conn.commit()
+conn.close()
+
+
