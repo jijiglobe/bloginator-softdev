@@ -16,4 +16,3 @@ c.execute(q)
 conn.commit()
 conn.close()
 
-

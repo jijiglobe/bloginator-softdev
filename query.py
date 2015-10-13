@@ -1,9 +1,7 @@
-
 import sqlite3
 
 conn = sqlite3.connect("blog.db")
 c = conn.cursor()
-
 
 def aPost():
     allPosts="""
@@ -24,6 +22,7 @@ def uPost(uid):
     result = c.execute(userPosts);
     for r in result:
         print (r)
+
 def comments(pid):
     postComments ="""
     SELECT user.name, comment.content 
