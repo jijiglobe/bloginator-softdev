@@ -1,40 +1,37 @@
 import sqlite3
 
-conn = sqlite3.connect("blog.db")
+conn = sqlit3.connect("blog.db")
 c = conn.cursor()
 
-def aPost():
-    allPosts="""
-    SELECT post.title, user.name, post.content
-    FROM post,user
-    WHERE post.uid=user.uid
-    """
-    result = c.execute(allPosts);
-    for r in result:
-        print (r)
+# Returns: Nothing
+def register_user(username, password):
+    pass
 
-def uPost(uid):
-    userPosts="""
-    SELECT user.name, post.title, post.content
-    FROM post,user
-    WHERE user.uid=
-    """+str(uid)
-    result = c.execute(userPosts);
-    for r in result:
-        print (r)
+# Returns: a dictionary with the keys:
+#   "title"     A string with the title of the post
+#   "contents"  A string with the contents of the post
+def get_post(pid):
+    pass
 
-def comments(pid):
-    postComments ="""
-    SELECT user.name, comment.content 
-    FROM post,comment,user
-    WHERE comment.uid = user.uid and comment.pid = post.pid and comment.pid =
-    """+ str(pid)
-    result = c.execute(postComments)
-    for r in result:
-        print (r)
+# Returns: a list of post ids made by the user specified by uid
+#   Each element of the list should be an integer containing the pid of the post
+def get_posts_by_user(uid):
+    pass
 
-aPost()
-print ("\n\nUserposts")
-uPost(2)
-print ("\n\nPostcomments")
-comments(1)
+# Returns: a list of dictionaries of all the posts
+#   Each element of the list should be a dictionary containing the keys:
+#       "commenter"
+#       "comment_id"
+#       "commenter_id"
+def get_comments_for_post(pid):
+    pass
+
+# Returns: a list of comment ids made by the user specified by uid
+#   Each element of the list should be an integer that is the comment id
+def get_comments_for_user(uid):
+    pass
+
+# Returns a string containing the content for the comment specified by cid
+def get_comment_contents(cid):
+    pass
+
