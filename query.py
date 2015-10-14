@@ -133,17 +133,54 @@ def get_comments_for_user(uid):
 def get_comment_contents(cid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    # FILL ME IN
+    q = """
+    SELECT contet
+    FROM comment
+    WHERE cid = 
+    """ + str(cid)
+    text = c.execute(q).fetone()
     conn.commit()
     conn.close()
+    return str(text[0])
 
 # Returns a boolean saying whether the user exists
-def authenticate(username, password):
-    pass
+def authenticate(username):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    SELECT username
+    FROM user
+    """
+    result = c.execute(q).fetchall()
+    conn.commit()
+    conn.close()
+    i = len(result) - 1
+    while i >= 0:
+        if result[i] == username:
+            return true
+        else:
+            i-=1
+    return false
 
 # Returns UID based on username and password
 def get_uid(username, password):
-    pass
+    if authenticate(username, password):
+        conn = sqlite3.connect(DB_NAME)
+        c = conn.cursor()
+        q = """
+        SELECT uid, password
+        FROM user
+        WHERE username = 
+        """ + username
+        result = c.execute(q).fetchone()
+        conn.commit()
+        conn.close()
+        if result[1] == password:
+            return result[0]
+        else:
+            return "Incorrect username or password."
+    else:
+        return "Incorrect username or password."
 
 # Adds new post
 def addPost(uid, content):
