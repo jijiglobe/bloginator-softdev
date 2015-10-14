@@ -106,6 +106,4 @@ def get_comment_contents(cid):
     conn.commit()
     conn.close()
 
-"""print(get_post(1))
-print(get_posts_by_uid(1))"""
-print(get_next_uid)
+
