@@ -2,50 +2,56 @@ import sqlite3
 
 DB_NAME = "blog.db"
 
-#Returns next available pid
+#Returns next available uid
 def get_next_uid():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "SELECT uid FROM user"
-    allUid = c.execute(q)
+    q = "SELECT uid FROM user ORDER BY uid ASC;"
+    allUid = c.execute(q).fetchall()
     conn.commit()
     conn.close()
     i = 0
-    while i == int(uid):
-        i+=1
+    for uid in allUid:
+        if i != uid[0]:
+            return i
+        i += 1
     return i
-
+    
 #Returns next available cid
 def get_next_cid():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "SELECT cid FROM comment"
+    q = "SELECT cid FROM comment ORDER BY cid ASC;"
     allCid = c.execute(q)
     conn.commit()
     conn.close()
     i = 0
-    while i == int(uid):
-        i+=1
+    for uid in allUid:
+        if i != uid[0]:
+            return i
+        i += 1
     return i
 
 #Returns next available pid
 def get_next_pid():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "SELECT pid FROM post"
+    q = "SELECT pid FROM post ORDER BY pid ASC;"
     allPid = c.execute(q)
     conn.commit()
     conn.close()
     i = 0
-    while i == int(uid):
-        i+=1
+    for uid in allUid:
+        if i != uid[0]:
+            return i
+        i += 1
     return i
 
 # Returns: Nothing
 def register_user(username, password):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "INSERT INTO user values(" + str(get_next_uid())+ "," + username + "," + password + ")";
+    q = "INSERT INTO user values(" + str(get_next_uid())+ "," + username + "," + password + ");";
     c.execute(q);
     conn.commit()
     conn.close()
@@ -56,10 +62,9 @@ def register_user(username, password):
 def get_post(pid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "SELECT title, content FROM post where pid=" + str(pid)
-    result = c.execute(q);
-    print(result)
-    post = {'title': result[0] , 'content': result[1]}
+    q = "SELECT title, content FROM post where pid=" + str(pid)+";"
+    result = c.execute(q).fetchone();
+    post = {'title': str(result[0]) , 'content': str(result[1])}
     conn.commit()
     conn.close()
     return post
@@ -106,4 +111,4 @@ def get_comment_contents(cid):
     conn.commit()
     conn.close()
 
-
+print get_post(1)
