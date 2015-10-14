@@ -74,10 +74,14 @@ def get_post(pid):
 def get_posts_by_user(uid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "SELECT uid FROM post,user where post.uid=" + str(uid)
-    userPosts = c.execute(q)
+    q = "SELECT pid FROM post,user where user.uid = post.uid and post.uid=" + str(uid)+";"
+    userPosts = c.execute(q).fetchall()
     conn.commit()
     conn.close()
+    i = len(userPosts) - 1
+    while (i >= 0 ):
+        userPosts[i] = userPosts[i][0]
+        i-=1
     return userPosts
 
 # Returns: a list of dictionaries of all the posts
@@ -88,10 +92,18 @@ def get_posts_by_user(uid):
 def get_comments_for_post(pid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "SELECT username, cid, comment.uid FROM post,user,comment WHERE comment.pid = post.pid and comment.pid =" + str(pid)
-    postComments = c.execute(q)
+    q = """SELECT username, cid, comment.uid FROM post
+    ,user,comment WHERE user.uid = comment.uid and comment.pid
+    = post.pid and comment.pid =""" + str(pid) + " ORDER BY cid ASC;"
+    postComments = c.execute(q).fetchall()
     conn.commit()
     conn.close()
+    i = len(postComments) - 1
+    while i >= 0:
+        postComments[i] = {'commenter': str(postComments[i][0])
+                           , 'comment_id': postComments[i][1],
+                           'commenter_id': postComments[i][2]}
+        i-=1
     return postComments
 
 # Returns: a list of comment ids made by the user specified by uid
@@ -111,4 +123,4 @@ def get_comment_contents(cid):
     conn.commit()
     conn.close()
 
-print get_post(1)
+
