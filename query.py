@@ -57,3 +57,13 @@ def get_comment_contents(cid):
     # FILL ME IN
     conn.commit()
     conn.close()
+
+# Returns a list of every post
+#   Each element in the list is a unique post id
+def get_all_posts():
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    # FILL ME IN
+    conn.commit()
+    conn.close()
+
