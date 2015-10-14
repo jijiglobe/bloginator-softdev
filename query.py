@@ -112,8 +112,19 @@ def get_comments_for_user(uid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     # FILL ME IN
+    q = """
+    SELECT cid
+    FROM user, comment
+    WHERE user.uid = comment.uid and comment.uid=
+    """ + str(uid) + ";"
+    userComments = c.execute(q).fetchall()
     conn.commit()
     conn.close()
+    i = len(userComments) - 1
+    while i >= 0:
+        userComments[i] = userComments[i][0]
+        i-=1
+    return userComments
 
 # Returns a string containing the content for the comment specified by cid
 def get_comment_contents(cid):
