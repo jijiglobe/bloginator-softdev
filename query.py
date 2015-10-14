@@ -141,4 +141,3 @@ def authenticate(username, password):
 # Returns UID based on username and password
 def get_uid(username, password):
     pass
-
