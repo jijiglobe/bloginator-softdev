@@ -134,4 +134,11 @@ def get_comment_contents(cid):
     conn.commit()
     conn.close()
 
+# Returns a boolean saying whether the user exists
+def authenticate(username, password):
+    pass
+
+# Returns UID based on username and password
+def get_uid(username, password):
+    pass
 
