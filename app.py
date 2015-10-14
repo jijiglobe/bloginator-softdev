@@ -32,7 +32,12 @@ def logout():
 
 @app.route("/register", methods=["GET","POST"]) #add account to table
 def register():
-    pass
+    if request.method == "GET":
+        return render_template("register.html")
+    else:
+        assert(request.method=="POST")
+        query.register_user(request.form['uname'], request.form['pword'])
+        return redirect(url_for("login"))
 
 @app.route("/profile", methods=["GET","POST"]) #list of all user posts + most recent comments
 def profile():
