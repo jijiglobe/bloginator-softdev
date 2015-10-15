@@ -2,6 +2,10 @@ import sqlite3
 
 DB_NAME = "blog.db"
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4447f9b366e3306e266108d448479e3fc0c2e0d5
 #Returns next available uid
 def get_next_uid():
     conn = sqlite3.connect(DB_NAME)
@@ -51,7 +55,7 @@ def get_next_pid():
 def register_user(username, password):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "INSERT INTO user values(" + str(get_next_uid())+ "," + username + "," + password + ");";
+    q = "INSERT INTO user values(" + str(get_next_uid())+ "," + username.lower() + "," + password + ");";
     c.execute(q);
     conn.commit()
     conn.close()
@@ -92,9 +96,15 @@ def get_posts_by_user(uid):
 def get_comments_for_post(pid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
+<<<<<<< HEAD
     q = """SELECT username, cid, comment.uid FROM post
     ,user,comment WHERE user.uid = comment.uid and comment.pid
     = post.pid and comment.pid =""" + str(pid) + " ORDER BY cid ASC;"
+=======
+    q = """SELECT username, cid, comment.uid
+    FROM post,user,comment
+    WHERE user.uid = comment.uid and comment.pid = post.pid and comment.pid =""" + str(pid) + ";"
+>>>>>>> 4447f9b366e3306e266108d448479e3fc0c2e0d5
     postComments = c.execute(q).fetchall()
     conn.commit()
     conn.close()
@@ -131,54 +141,54 @@ def get_comment_contents(cid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     q = """
-    SELECT contet
+    SELECT content
     FROM comment
     WHERE cid = 
-    """ + str(cid)
-    text = c.execute(q).fetone()
+    """ + str(cid) + ";"
+    text = c.execute(q).fetchone()
     conn.commit()
     conn.close()
     return str(text[0])
-
+       
 # Returns a boolean saying whether the user exists
 def authenticate(username):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     q = """
     SELECT username
-    FROM user
+    FROM user;
     """
     result = c.execute(q).fetchall()
     conn.commit()
     conn.close()
     i = len(result) - 1
     while i >= 0:
-        if result[i] == username:
-            return true
+        if str(result[i]).lower() == "('"+username.lower()+"',)":
+            return True
         else:
             i-=1
-    return false
+    return False
 
 # Returns UID based on username and password
 def get_uid(username, password):
-    if authenticate(username, password):
+    if authenticate(username):
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
         q = """
         SELECT uid, password
         FROM user
-        WHERE username = 
-        """ + username
+        WHERE username = '""" + username + "';"
         result = c.execute(q).fetchone()
         conn.commit()
         conn.close()
-        if result[1] == password:
+        if str(result[1]) == password:
             return result[0]
         else:
             return "Incorrect username or password."
     else:
         return "Incorrect username or password."
 
+<<<<<<< HEAD
 # Returns nothing
 #  Adds a comment to comment table
 def add_comment(text):
@@ -188,3 +198,47 @@ def add_comment(text):
 def get_post_list():
     pass
 
+=======
+# Adds new post
+def addPost(uid,title, content):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """ 
+    INSERT INTO user values( """ + str(get_next_pid()) + "," + str(uid) + "," + title + "," + content +");"
+    c.execute(q)
+    conn.commit()
+    conn.close()
+    
+
+# Adds new comment to a post
+def addComment(uid, pid, content):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q= """
+    INSERT INTO comment values( """ + str(get_next_cid()) + "," + str(pid) + "," + str(uid) + content + ");"
+    c.execute(q)
+    conn.commit()
+    conn.close()
+
+# Delete post
+def delPost(pid):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    DELETE FROM post WHERE pid = 
+    """ + str(pid)
+    c.execute(q)
+    conn.commit()
+    conn.close()
+
+# Delete comment
+def delComment(cid):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    DELETE FROM comment WHERE cid = 
+    """ + str(cid)
+    c.execute(q)
+    conn.commit()
+    conn.close()
+>>>>>>> 4447f9b366e3306e266108d448479e3fc0c2e0d5
