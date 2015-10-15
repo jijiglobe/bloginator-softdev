@@ -209,8 +209,14 @@ def delPost(pid):
     c.execute(q)
     conn.commit()
     conn.close()
-delPost(3)
 
 # Delete comment
 def delComment(cid):
-    pass
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    DELETE FROM comment WHERE cid = 
+    """ + str(cid)
+    c.execute(q)
+    conn.commit()
+    conn.close()
