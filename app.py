@@ -27,7 +27,7 @@ def login(): #confirm uid and password exists
 
 @app.route("/logout")
 def logout():
-    session['logged_in'] = False
+    session.clear()
     return redirect(url_for("home"))
 
 @app.route("/register", methods=["GET","POST"]) 
@@ -40,26 +40,29 @@ def register():
         return redirect(url_for("login"))
 
 @app.route("/profile/<uid>", methods=["GET","POST"]) #list of all user posts + most recent comments
-def profile(uid=0):
-    uid = int(uid)
+def profile():
+    
     #how do you validate this? what if it is an invlaid number or something
-    postList = query.get_posts_by_user(uid) #post ids
-    postDict = {}
+    postList = query.get_posts_by_user(session['UID']) #post ids
+    retList = []
     ctr = 0
     while ctr < len(postList):
-        title = query.get_post(postList[ctr])["title"]
-        #content = query.get_post(postList[ctr])["contents"]
-        topCommentID = query.get_comments_for_post(postList[ctr])[0]["comment_id"]
-        topComment = query.get_comment_contents(topCommentID)
-        postDict[title] = topComment
+        d = query.get_post(postList[ctr]) # {"title":-, "contents":-, "username":-,}
+        listOfComments = query.get_comments_for_post(postList[ctr])
+        lastInd = len(listOfComments) -1
+        topCommentID = listOfComments[lastInd]["comment_id"]
+        topCommentString = query.get_comment_contents(topCommentID)
+        d['last_comment'] = topCommentString
+        retList.append(d)
         ctr += 1
-    return render_template("userposts.html", POST_DICT = postDict)
+    #retList in the format [ {"title":,"contents":,"username":,"last_comment":}, {...}]
+    return render_template("userposts.html", POST_LIST = retlist)
     
-
-@app.route("/posts") #shows all posts, title + most recent comment
+#add new posts here
+@app.route("/posts") #shows all posts, title + most recent comment. 
 def posts():
-    postList = query.get_post_list; #list of all pid's
-    postDict = {}
+    postList = query.get_post_list(); #list of all pid's
+    listOfDicts = []
     ctr = 0;
     while ctr < len(postList):
         title = query.get_post(postList[ctr])["title"] 
@@ -68,7 +71,7 @@ def posts():
         topComment = query.get_comment_contents(topCommentID)
         postDict[title]=topComment
         ctr += 1
-     return render_template("allposts.html", POST_DICT = postDict)#, PIDS_LIST = postList) 
+    return render_template("allposts.html", POST_DICT = postDict)#, PIDS_LIST = postList) 
 
 @app.route("/posts/<pid>", methods = ["GET","POST"]) #for individual posts
 def onepost(pid=0):
