@@ -30,7 +30,7 @@ def logout():
     session['logged_in'] = False
     return redirect(url_for("home"))
 
-@app.route("/register", methods=["GET","POST"]) #add account to table
+@app.route("/register", methods=["GET","POST"]) 
 def register():
     if request.method == "GET":
         return render_template("register.html")
@@ -39,18 +39,55 @@ def register():
         query.register_user(request.form['uname'], request.form['pword'])
         return redirect(url_for("login"))
 
-@app.route("/profile", methods=["GET","POST"]) #list of all user posts + most recent comments
-def profile():
-    pass
+@app.route("/profile/<uid>", methods=["GET","POST"]) #list of all user posts + most recent comments
+def profile(uid=0):
+    uid = int(uid)
+    #how do you validate this? what if it is an invlaid number or something
+    postList = query.get_posts_by_user(uid) #post ids
+    postDict = {}
+    ctr = 0
+    while ctr < len(postList):
+        title = query.get_post(postList[ctr])["title"]
+        #content = query.get_post(postList[ctr])["contents"]
+        topCommentID = query.get_comments_for_post(postList[ctr])[0]["comment_id"]
+        topComment = query.get_comment_contents(topCommentID)
+        postDict[title] = topComment
+        ctr += 1
+    return render_template("userposts.html", POST_DICT = postDict)
+    
 
 @app.route("/posts") #shows all posts, title + most recent comment
 def posts():
-    pass
+    postList = query.get_post_list; #list of all pid's
+    postDict = {}
+    ctr = 0;
+    while ctr < len(postList):
+        title = query.get_post(postList[ctr])["title"] 
+        #content = query.get_post(postList[ctr])["contents"]
+        topCommentID = query.get_comments_for_post(postList[ctr])[0]["comment_id"]
+        topComment = query.get_comment_contents(topCommentID)
+        postDict[title]=topComment
+        ctr += 1
+     return render_template("allposts.html", POST_DICT = postDict)#, PIDS_LIST = postList) 
 
-@app.route("/posts/<pid>") #for individual posts
-def onepost():
-    #create comments
-    pass
+@app.route("/posts/<pid>", methods = ["GET","POST"]) #for individual posts
+def onepost(pid=0):
+    if request.method == "GET":
+        commentList = query.get_comments_for_post(pid) #actually a dicitonary
+        ctr = 0;
+        while ctr < len(commentList):
+            x = query.get_comment_contents(commentList[ctr]["comment_id"])
+            commentList[ctr] = x
+            ctr += 1
+        #commentList is now a list of strings of the contents
+        pid = int(pid)
+        #check for valid pid somehow?
+        return render_template("post.html", POST_CONTENT = query.get_post(pid), COMMENT_LIST = commentList)
+    else:
+        assert(request.method == "POST")
+        query.add_comment(request.form['comment_content'])
+        return redirect(url_for("posts/<pid>"))
+
 
 if __name__ == "__main__":
     app.debug = True

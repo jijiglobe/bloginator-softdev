@@ -2,10 +2,6 @@ import sqlite3
 
 DB_NAME = "blog.db"
 
-# Returns next timestamp
-def get_next_ts(mode):
-    pass
-
 #Returns next available uid
 def get_next_uid():
     conn = sqlite3.connect(DB_NAME)
@@ -96,9 +92,9 @@ def get_posts_by_user(uid):
 def get_comments_for_post(pid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = """SELECT username, cid, comment.uid
-    FROM post,user,comment
-    WHERE user.uid = comment.uid and comment.pid = post.pid and comment.pid =""" + str(pid) + " ORDER BY cid ASC;"
+    q = """SELECT username, cid, comment.uid FROM post
+    ,user,comment WHERE user.uid = comment.uid and comment.pid
+    = post.pid and comment.pid =""" + str(pid) + " ORDER BY cid ASC;"
     postComments = c.execute(q).fetchall()
     conn.commit()
     conn.close()
@@ -115,6 +111,7 @@ def get_comments_for_post(pid):
 def get_comments_for_user(uid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
+    # FILL ME IN
     q = """
     SELECT cid
     FROM user, comment
@@ -145,19 +142,12 @@ def authenticate(username, password):
 def get_uid(username, password):
     pass
 
-# Adds new post
-def addPost(uid, content):
+# Returns nothing
+#  Adds a comment to comment table
+def add_comment(text):
     pass
 
-# Adds new comment to a post
-def addComment(uid, pid, content):
-    pass
-
-# Delete post
-def delPost(pid):
-    pass
-
-# Delete comment
-def delComment(cid):
+# Returns a list of all pid's
+def get_post_list():
     pass
 
