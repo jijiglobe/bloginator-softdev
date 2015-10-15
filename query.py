@@ -253,5 +253,11 @@ def get_all_pids():
     conn.commit()
     conn.close()
     return pids
-    
 
+#return uid from post
+def get_uid_from_post(pid):
+    pass
+
+#return uid from comment
+def get_uid_from_comment(cid):
+    pass
