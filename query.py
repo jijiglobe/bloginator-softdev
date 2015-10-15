@@ -2,9 +2,6 @@ import sqlite3
 
 DB_NAME = "blog.db"
 
-# Returns next timestamp
-def get_next_ts(mode):
-    pass
 
 #Returns next available uid
 def get_next_uid():
@@ -98,7 +95,7 @@ def get_comments_for_post(pid):
     c = conn.cursor()
     q = """SELECT username, cid, comment.uid
     FROM post,user,comment
-    WHERE user.uid = comment.uid and comment.pid = post.pid and comment.pid =""" + str(pid) + " ORDER BY cid ASC;"
+    WHERE user.uid = comment.uid and comment.pid = post.pid and comment.pid =""" + str(pid) + ";"
     postComments = c.execute(q).fetchall()
     conn.commit()
     conn.close()
@@ -183,12 +180,25 @@ def get_uid(username, password):
         return "Incorrect username or password."
 
 # Adds new post
-def addPost(uid, content):
-    pass
+def addPost(uid,title, content):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """ 
+    INSERT INTO user values( """ + str(get_next_pid()) + "," + str(uid) + "," + title + "," + content +");"
+    c.execute(q)
+    conn.commit()
+    conn.close()
+    
 
 # Adds new comment to a post
 def addComment(uid, pid, content):
-    pass
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q= """
+    INSERT INTO comment values( """ + str(get_next_cid()) + "," + str(pid) + "," + str(uid) + content + ");"
+    c.execute(q)
+    conn.commit()
+    conn.close(0
 
 # Delete post
 def delPost(pid):
