@@ -59,12 +59,13 @@ def register_user(username, password):
 # Returns: a dictionary with the keys:
 #   "title"     A string with the title of the post
 #   "contents"  A string with the contents of the post
+#   "username"  A string with the username of the poster
 def get_post(pid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "SELECT title, content FROM post where pid=" + str(pid)+";"
+    q = "SELECT title, content,username FROM post,user where post.uid = user.uid and pid=" + str(pid)+";"
     result = c.execute(q).fetchone();
-    post = {'title': str(result[0]) , 'content': str(result[1])}
+    post = {'title': str(result[0]) , 'content': str(result[1]), 'username': str(result[2])}
     conn.commit()
     conn.close()
     return post
@@ -220,4 +221,37 @@ def delComment(cid):
     c.execute(q)
     conn.commit()
     conn.close()
+
+#gets all comment content for a post
+def comments_contents_for_user(uid):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    cids = get_comments_for_user(uid)
+    content = []
+    for cid in cids:
+        content += [get_comment_contents(cid)]
+    conn.commit()
+    conn.close()
+    return content
+
+
+    
+#return list the posts in a dictionary with keys
+#       {'title': title
+#        'content':content
+#        'username':username }
+
+def get_all_pids():
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = "SELECT pid FROM post;"
+    result = list(c.execute(q))
+    print result
+    pids = []
+    for pid in result:
+        pids += [pid[0]]
+    conn.commit()
+    conn.close()
+    return pids
+    
 
