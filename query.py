@@ -265,8 +265,18 @@ def get_uid_from_post(pid):
     conn.commit()
     conn.close()
     return result[0]
-print (get_uid_from_post(1))
 
 #return uid from comment
 def get_uid_from_comment(cid):
-    pass
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    SELECT uid
+    FROM comment
+    WHERE cid = 
+    """ + str(cid) +";"
+    result = c.execute(q).fetchone()
+    conn.commit()
+    conn.close()
+    return result[0]
+print (get_uid_from_comment(1))
