@@ -154,7 +154,7 @@ def authenticate(username):
     conn.close()
     i = len(result) - 1
     while i >= 0:
-        if str(result[i]).lower() == "('"+username.lower()+"',)":
+        if str(result[i][0]).lower() == username.lower():
             return True
         else:
             i-=1
@@ -175,9 +175,9 @@ def get_uid(username, password):
         if str(result[1]) == password:
             return result[0]
         else:
-            return "Incorrect username or password."
+            return -1
     else:
-        return "Incorrect username or password."
+        return -1
 
 # Adds new post
 def addPost(uid,title, content):
@@ -293,3 +293,16 @@ def get_pid_from_comment(cid):
     conn.commit()
     conn.close()
     return result[0]
+
+#Changes password
+def change_password(username, oldpass, newpass):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    uid = get_uid(username,oldpass)
+    if not (uid == -1):
+        q = """UPDATE user SET password ='""" + newpass + "' WHERE uid = " + str(uid) + ";"
+        c.execute(q)
+    conn.commit()
+    conn.close()
+
+change_password("HoYin", "password", "passwordtwopointO")
