@@ -240,13 +240,11 @@ def comments_contents_for_user(uid):
 #       {'title': title
 #        'content':content
 #        'username':username }
-
 def get_all_pids():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     q = "SELECT pid FROM post;"
     result = list(c.execute(q))
-    print result
     pids = []
     for pid in result:
         pids += [pid[0]]
@@ -256,7 +254,18 @@ def get_all_pids():
 
 #return uid from post
 def get_uid_from_post(pid):
-    pass
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    SELECT uid
+    FROM post
+    WHERE pid = 
+    """ + str(pid) +";"
+    result = c.execute(q).fetchone()
+    conn.commit()
+    conn.close()
+    return result[0]
+print (get_uid_from_post(1))
 
 #return uid from comment
 def get_uid_from_comment(cid):
