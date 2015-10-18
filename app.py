@@ -3,7 +3,7 @@ import query
 
 app = Flask(__name__)
 
-@app.route("")
+@app.route("/")
 @app.route("/home")
 def home():
     return render_template("home.html")
@@ -19,7 +19,7 @@ def login(): #confirm uid and password exists
             assert(request.method == "POST")
             username = request.form['uname']
             password = request.form['pword']
-            if query.authenticate(username, password)
+            if query.authenticate(username, password):
                 session['logged_in'] = True
                 session['UID'] = query.get_uid(username, password)
                 return redirect(url_for("posts"))
