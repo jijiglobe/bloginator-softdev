@@ -2,7 +2,6 @@ import sqlite3
 
 DB_NAME = "blog.db"
 
-
 #Returns next available uid
 def get_next_uid():
     conn = sqlite3.connect(DB_NAME)
@@ -52,7 +51,7 @@ def get_next_pid():
 def register_user(username, password):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "INSERT INTO user values(" + str(get_next_uid())+ "," + username + "," + password + ");";
+    q = "INSERT INTO user values(" + str(get_next_uid())+ "," + username.lower() + "," + password + ");";
     c.execute(q);
     conn.commit()
     conn.close()
@@ -60,12 +59,13 @@ def register_user(username, password):
 # Returns: a dictionary with the keys:
 #   "title"     A string with the title of the post
 #   "contents"  A string with the contents of the post
+#   "username"  A string with the username of the poster
 def get_post(pid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "SELECT title, content FROM post where pid=" + str(pid)+";"
+    q = "SELECT title, content,username FROM post,user where post.uid = user.uid and pid=" + str(pid)+";"
     result = c.execute(q).fetchone();
-    post = {'title': str(result[0]) , 'content': str(result[1])}
+    post = {'title': str(result[0]) , 'content': str(result[1]), 'username': str(result[2])}
     conn.commit()
     conn.close()
     return post
@@ -112,6 +112,7 @@ def get_comments_for_post(pid):
 def get_comments_for_user(uid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
+    # FILL ME IN
     q = """
     SELECT cid
     FROM user, comment
@@ -131,53 +132,52 @@ def get_comment_contents(cid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     q = """
-    SELECT contet
+    SELECT content
     FROM comment
     WHERE cid = 
-    """ + str(cid)
-    text = c.execute(q).fetone()
+    """ + str(cid) + ";"
+    text = c.execute(q).fetchone()
     conn.commit()
     conn.close()
     return str(text[0])
-
+       
 # Returns a boolean saying whether the user exists
 def authenticate(username):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     q = """
     SELECT username
-    FROM user
+    FROM user;
     """
     result = c.execute(q).fetchall()
     conn.commit()
     conn.close()
     i = len(result) - 1
     while i >= 0:
-        if result[i] == username:
-            return true
+        if str(result[i][0]).lower() == username.lower():
+            return True
         else:
             i-=1
-    return false
+    return False
 
 # Returns UID based on username and password
 def get_uid(username, password):
-    if authenticate(username, password):
+    if authenticate(username):
         conn = sqlite3.connect(DB_NAME)
         c = conn.cursor()
         q = """
         SELECT uid, password
         FROM user
-        WHERE username = 
-        """ + username
+        WHERE username = '""" + username + "';"
         result = c.execute(q).fetchone()
         conn.commit()
         conn.close()
-        if result[1] == password:
+        if str(result[1]) == password:
             return result[0]
         else:
-            return "Incorrect username or password."
+            return -1
     else:
-        return "Incorrect username or password."
+        return -1
 
 # Adds new post
 def addPost(uid,title, content):
@@ -198,13 +198,111 @@ def addComment(uid, pid, content):
     INSERT INTO comment values( """ + str(get_next_cid()) + "," + str(pid) + "," + str(uid) + content + ");"
     c.execute(q)
     conn.commit()
-    conn.close(0
+    conn.close()
 
 # Delete post
 def delPost(pid):
-    pass
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    DELETE FROM post WHERE pid = 
+    """ + str(pid)
+    c.execute(q)
+    conn.commit()
+    conn.close()
 
 # Delete comment
 def delComment(cid):
-    pass
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    DELETE FROM comment WHERE cid = 
+    """ + str(cid)
+    c.execute(q)
+    conn.commit()
+    conn.close()
 
+#gets all comment content for a post
+def comments_contents_for_user(uid):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    cids = get_comments_for_user(uid)
+    content = []
+    for cid in cids:
+        content += [get_comment_contents(cid)]
+    conn.commit()
+    conn.close()
+    return content
+
+
+    
+#return list the posts in a dictionary with keys
+#       {'title': title
+#        'content':content
+#        'username':username }
+def get_all_pids():
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = "SELECT pid FROM post;"
+    result = list(c.execute(q))
+    pids = []
+    for pid in result:
+        pids += [pid[0]]
+    conn.commit()
+    conn.close()
+    return pids
+
+#return uid from post
+def get_uid_from_post(pid):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    SELECT uid
+    FROM post
+    WHERE pid = 
+    """ + str(pid) +";"
+    result = c.execute(q).fetchone()
+    conn.commit()
+    conn.close()
+    return result[0]
+
+#return uid from comment
+def get_uid_from_comment(cid):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    SELECT uid
+    FROM comment
+    WHERE cid = 
+    """ + str(cid) +";"
+    result = c.execute(q).fetchone()
+    conn.commit()
+    conn.close()
+    return result[0]
+
+#return pid from comment
+def get_pid_from_comment(cid):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    q = """
+    SELECT pid
+    FROM comment
+    WHERE cid = 
+    """ + str(cid) +";"
+    result = c.execute(q).fetchone()
+    conn.commit()
+    conn.close()
+    return result[0]
+
+#Changes password
+def change_password(username, oldpass, newpass):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    uid = get_uid(username,oldpass)
+    if not (uid == -1):
+        q = """UPDATE user SET password ='""" + newpass + "' WHERE uid = " + str(uid) + ";"
+        c.execute(q)
+    conn.commit()
+    conn.close()
+
+change_password("HoYin", "password", "passwordtwopointO")
