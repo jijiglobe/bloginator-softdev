@@ -14,7 +14,7 @@ def login(): #confirm uid and password exists
             if 'logged_in' in session and session['logged_in']:
                 return redirect(url_for("posts"))
             else:
-                return render_template("home.html")
+                return render_template("login.html")
         else:
             assert(request.method == "POST")
             username = request.form['uname']
