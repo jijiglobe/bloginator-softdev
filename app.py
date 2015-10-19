@@ -19,7 +19,7 @@ def login(): #confirm uid and password exists
             assert(request.method == "POST")
             username = request.form['uname']
             password = request.form['pword']
-            if query.authenticate(username, password):
+            if query.get_uid(username, password) != -1:
                 session['logged_in'] = True
                 session['UID'] = query.get_uid(username, password)
                 return redirect(url_for("posts"))
