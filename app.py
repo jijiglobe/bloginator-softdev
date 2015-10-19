@@ -111,6 +111,7 @@ def onepost(pid=-1):
                 
 
 if __name__ == "__main__":
+    app.secret_key = "plsfortheloveofgodletthiswork"
     app.debug = True
     app.secret_key = "Secretive secret key"
     app.run('0.0.0.0', port=8000)
