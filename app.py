@@ -69,7 +69,7 @@ def posts():
         content = query.get_post(postList[ctr])["content"]
         topCommentID = query.get_comments_for_post(postList[ctr])[0]["comment_id"]
         topComment = query.get_comment_contents(topCommentID)
-        postDict[postList[ctr]]={'title':title,'topComment':topComment,'content':content}
+        postDict[postList[ctr]]={'pid':postList[ctr],'title':title,'topComment':topComment,'content':content}
         ctr += 1
     if request.method == "GET":
         #postDict format: {pid: {'title':, 'topComment':}, pid:{...}, ...}
@@ -79,16 +79,19 @@ def posts():
         if not session['logged_in']:
             return render_template("allposts.html", POST_DICT = postDict, error = "Please log in before you post!")
         else:
-            if ('newpost' in request.form): #submit button for new post
+            print request.form
+            if 'title' in request.form: #submit button for new post
                 query.addPost(session["UID"],request.form['title'], request.form['content'])
-                query.addComment(session["UID"],get_posts_by_user(session["UID"])[-1],request.form['comment'])
+                return redirect(url_for("posts"))
+            else:
+                print("ERROR: NOT ADDED")
                 return redirect(url_for("posts"))
 
         
 @app.route("/posts/<pid>", methods = ["GET","POST"]) #for individual posts
 def onepost(pid=-1):
     pid = int(pid)
-    if len(get_post(pid)) == 0:
+    if len(query.get_post(pid)) == 0:
             return redirect(url_for("posts"))
     else:
         if request.method == "GET":
