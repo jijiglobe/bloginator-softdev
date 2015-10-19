@@ -64,13 +64,13 @@
         <p>
         {% for post in POST_DICT %}
         <div class="title">
-            <a href="/posts/{{POST_DICT[POST_DICT|length - post - 1]['pid']}}">
+            <a href="/posts/{{POST_DICT[POST_DICT|length - post|int - 1]['pid']}}">
                 {{POST_DICT[POST_DICT|length - post - 1]['title']}}
             </a>
             <div class="content">
-                {{POST_DICT[POST_DICT|length - post - 1]['content']}}
+                {{POST_DICT[POST_DICT|length - post|int - 1]['content']}}
                 <div class = "comment">
-                    {{POST_DICT[POST_DICT|length - post - 1]['topComment']}}
+                    {{POST_DICT[POST_DICT|length - post|int - 1]['topComment']}}
                 </div>
             </div>
         </div>

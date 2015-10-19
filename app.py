@@ -67,9 +67,14 @@ def posts():
     while ctr < len(postList):
         title = query.get_post(postList[ctr])["title"] 
         content = query.get_post(postList[ctr])["content"]
-        topCommentID = query.get_comments_for_post(postList[ctr])[0]["comment_id"]
-        topComment = query.get_comment_contents(topCommentID)
-        postDict[postList[ctr]]={'pid':postList[ctr],'title':title,'topComment':topComment,'content':content}
+        postDict = {}
+        try:
+            topCommentID = query.get_comments_for_post(postList[ctr])[0]["comment_id"]
+            topComment = query.get_comment_contents(topCommentID)
+            postDict[postList[ctr]]={'pid':postList[ctr],'title':title,'topComment':topComment,'content':content}
+        except:
+            postDict = {'pid':postList[ctr], 'title':title, 'topComment': "",
+                    'content': content}
         ctr += 1
     if request.method == "GET":
         #postDict format: {pid: {'title':, 'topComment':}, pid:{...}, ...}

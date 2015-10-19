@@ -63,9 +63,11 @@ def register_user(username, password):
 def get_post(pid):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "SELECT title, content,username FROM post,user where post.uid = user.uid and pid=" + str(pid)+";"
-    result = c.execute(q).fetchone();
-    post = {'title': str(result[0]) , 'content': str(result[1]), 'username': str(result[2])}
+    q = "SELECT title,content,username FROM post,user where post.uid = user.uid and pid=" + str(pid)+";"
+    result = c.execute(q).fetchone()
+    post = {}
+    if len(result) == 3:
+        post = {'title': str(result[0]) , 'content': str(result[1]), 'username': str(result[2])}
     conn.commit()
     conn.close()
     return post
@@ -186,9 +188,8 @@ def addPost(uid,title, content):
     pid = get_next_pid()
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = """
-    INSERT INTO user values( """ + str(pid) + "," + str(uid) + "," + title + "," + content +");"
-    c.execute(q)
+    q = "INSERT INTO post VALUES (?,?,?,?);"
+    c.execute(q, (str(pid), str(uid), title, content))
     conn.commit()
     conn.close()
     
@@ -198,9 +199,8 @@ def addComment(uid, pid, content):
     cid = get_next_cid
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q= """
-    INSERT INTO comment values( """ + str(cid) + "," + str(pid) + "," + str(uid) + content + ");"
-    c.execute(q)
+    q= "INSERT INTO comment VALUES (?,?,?,?)"
+    c.execute(q, (str(cid), str(pid), str(uid), content))
     conn.commit()
     conn.close()
 
