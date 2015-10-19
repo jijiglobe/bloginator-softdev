@@ -172,7 +172,7 @@ def get_uid(username, password):
         result = c.execute(q).fetchone()
         conn.commit()
         conn.close()
-        if result == null:
+        if result is None:
             return -1
         if str(result[1]) == password:
             return result[0]
