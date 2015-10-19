@@ -61,15 +61,15 @@ def profile():
 #add new posts here
 @app.route("/posts") #shows all posts, title + most recent comment. 
 def posts():
-    postList = query.get_post_list(); #list of all pid's
+    postList = list(reversed(query.get_all_pids())); #list of all pid's
     postDict = {}
     ctr = 0;
     while ctr < len(postList):
         title = query.get_post(postList[ctr])["title"] 
-        #content = query.get_post(postList[ctr])["contents"]
+        content = query.get_post(postList[ctr])["content"]
         topCommentID = query.get_comments_for_post(postList[ctr])[0]["comment_id"]
         topComment = query.get_comment_contents(topCommentID)
-        postDict[postList[ctr]]={'title':title,'topComment':topComment}
+        postDict[postList[ctr]]={'title':title,'topComment':topComment,'content':content}
         ctr += 1
     if request.method == "GET":
         #postDict format: {pid: {'title':, 'topComment':}, pid:{...}, ...}
