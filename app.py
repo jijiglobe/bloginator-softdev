@@ -79,7 +79,7 @@ def posts():
         if not session['logged_in']:
             return render_template("allposts.html", POST_DICT = postDict, error = "Please log in before you post!")
         else:
-            if (request.POST.get('newpost')): #submit button for new post
+            if ('newpost' in request.form): #submit button for new post
                 query.addPost(session["UID"],request.form['title'], request.form['content'])
                 query.addComment(session["UID"],get_posts_by_user(session["UID"])[-1],request.form['comment'])
                 return redirect(url_for("posts"))
