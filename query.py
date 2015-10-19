@@ -26,8 +26,8 @@ def get_next_cid():
     conn.commit()
     conn.close()
     i = 0
-    for uid in allUid:
-        if i != uid[0]:
+    for cid in allCid:
+        if i != cid[0]:
             return i
         i += 1
     return i
@@ -38,13 +38,13 @@ def get_next_pid():
     c = conn.cursor()
     q = "SELECT pid FROM post ORDER BY pid ASC;"
     allPid = c.execute(q)
-    conn.commit()
-    conn.close()
     i = 0
-    for uid in allUid:
-        if i != uid[0]:
+    for pid in allPid:
+        if i != pid[0]:
             return i
         i += 1
+    conn.commit()
+    conn.close()
     return i
 
 # Returns: Nothing
@@ -183,10 +183,11 @@ def get_uid(username, password):
 
 # Adds new post
 def addPost(uid,title, content):
+    pid = get_next_pid()
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = """ 
-    INSERT INTO user values( """ + str(get_next_pid()) + "," + str(uid) + "," + title + "," + content +");"
+    q = """
+    INSERT INTO user values( """ + str(pid) + "," + str(uid) + "," + title + "," + content +");"
     c.execute(q)
     conn.commit()
     conn.close()
@@ -194,10 +195,11 @@ def addPost(uid,title, content):
 
 # Adds new comment to a post
 def addComment(uid, pid, content):
+    cid = get_next_cid
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     q= """
-    INSERT INTO comment values( """ + str(get_next_cid()) + "," + str(pid) + "," + str(uid) + content + ");"
+    INSERT INTO comment values( """ + str(cid) + "," + str(pid) + "," + str(uid) + content + ");"
     c.execute(q)
     conn.commit()
     conn.close()

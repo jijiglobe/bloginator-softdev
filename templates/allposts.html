@@ -78,17 +78,17 @@
         <br>
         {% endfor %}
         </p>
-        <form method="POST" class="post">
+        <form method="POST">
             <h2> Title: </h2>
             <br>
-            <input style="height:40px; width:100%" type="text" id="title">
+            <input style="height:40px; width:100%" type="text" name="title" id="title">
             <br>
             <h2> Content: </h2>
             <br>
-            <textarea style="height:200px; width:100%" rows="10" id="content"></textarea>
+            <textarea style="height:200px; width:100%" rows="10" name="content" id="content"></textarea>
             <br>
             <br>
-            <button id="newpost" class="btn btn-lg btn-primary btn-block" type="submit"> New Post </button>
+            <button name="newpost" id="newpost" class="btn btn-lg btn-primary btn-block" type="submit"> New Post </button>
         </form>
     </body>
 </html>
