@@ -51,8 +51,8 @@ def get_next_pid():
 def register_user(username, password):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    q = "INSERT INTO user values(" + str(get_next_uid())+ "," + username.lower() + "," + password + ");";
-    c.execute(q);
+    q = "INSERT INTO user values (?,?,?);"
+    c.execute(q, (str(get_next_uid()), username.lower(), password))
     conn.commit()
     conn.close()
 

@@ -10,7 +10,7 @@
         <meta name="author" content="">
         <link rel="icon" href="../../favicon.ico">
 
-        <title>Signin</title>
+        <title>Register</title>
 
         <!-- Bootstrap core CSS -->
         <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -43,14 +43,8 @@
                 <input type="text" id="uname" name="uname" class="form-control" placeholder="Username" autofocus>
                 <label for="pword" class="sr-only">Password</label>
                 <input type="password" id="pword" name="pword" class="form-control" placeholder="Password">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="remember"> Remember me
-                    </label>
-                </div>
-                <button href="#posts" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-                <br>
-                <b><a href="/register">Don't have an account? Click here!</a></b>
+                <button href="#posts" class="btn btn-lg btn-primary btn-block"
+                    type="submit">Register</button>
             </form>
             {% if ERROR %}
             <div class="row">
