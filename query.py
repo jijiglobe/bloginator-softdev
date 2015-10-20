@@ -23,13 +23,13 @@ def get_next_cid():
     c = conn.cursor()
     q = "SELECT cid FROM comment ORDER BY cid ASC;"
     allCid = c.execute(q)
-    conn.commit()
-    conn.close()
     i = 0
     for cid in allCid:
         if i != cid[0]:
             return i
         i += 1
+    conn.commit()
+    conn.close()
     return i
 
 #Returns next available pid
@@ -99,14 +99,14 @@ def get_comments_for_post(pid):
     FROM post,user,comment
     WHERE user.uid = comment.uid and comment.pid = post.pid and comment.pid =""" + str(pid) + ";"
     postComments = c.execute(q).fetchall()
-    conn.commit()
-    conn.close()
     i = len(postComments) - 1
     while i >= 0:
         postComments[i] = {'commenter': str(postComments[i][0])
                            , 'comment_id': postComments[i][1],
                            'commenter_id': postComments[i][2]}
         i-=1
+    conn.commit()
+    conn.close()
     return postComments
 
 # Returns: a list of comment ids made by the user specified by uid
@@ -196,7 +196,7 @@ def addPost(uid,title, content):
 
 # Adds new comment to a post
 def addComment(uid, pid, content):
-    cid = get_next_cid
+    cid = get_next_cid()
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     q= "INSERT INTO comment VALUES (?,?,?,?)"

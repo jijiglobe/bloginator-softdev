@@ -75,6 +75,14 @@
             </div>
         </div>
         <hr>
+        <form method="POST">
+            <h2> New Comment: </h2>
+            <br>
+            <textarea style="height:200px; width:100%" rows="10" name="comment_content" id="comment_content"></textarea>
+            <br>
+            <br>
+            <button name="add_comment" id="add_comment" class="btn btn-lg btn-primary btn-block" type="submit"> Comment </button>
+        </form>
         <h2> Comments: </h2>
         {% for comment in COMMENT_LIST %}
         <div class="title">

@@ -81,7 +81,7 @@ def posts():
             return render_template("allposts.html", POST_DICT = postDict, error = "Please log in before you post!")
         else:
             print request.form
-            if 'title' in request.form: #submit button for new post
+            if 'newpost' in request.form:
                 query.addPost(session["UID"],request.form['title'], request.form['content'])
                 return redirect(url_for("posts"))
             else:
@@ -93,21 +93,22 @@ def onepost(pid=-1):
     pid = int(pid)
     if len(query.get_post(pid)) == 0:
         return redirect(url_for("posts"))
+    if request.method == "GET":
+        commentList = query.get_comments_for_post(pid)
+        for comment in commentList:
+            comment["contents"] = query.get_comment_contents(comment["comment_id"])
+        return render_template("post.html", POST_CONTENT = query.get_post(pid), COMMENT_LIST = commentList)
     else:
-        if request.method == "GET":
-            commentList = query.get_comments_for_post(pid)
-            for comment in commentList:
-                comment["contents"] = query.get_comment_contents(comment["comment_id"])
-            return render_template("post.html", POST_CONTENT = query.get_post(pid), COMMENT_LIST = commentList)
+        assert(request.method == "POST")
+        if 'add_comment' in request.form:
+            query.addComment(session['UID'], pid, request.form['comment_content'])
+            return redirect(url_for("onepost", pid=pid))
+        elif 'del_comment' in request.form:
+            if session['UID'] == query.get_uid_from_post(pid):
+                query.delPost(pid)
+            return redirect(url_for("posts"))
         else:
-            assert(request.method == "POST")
-            if (request.POST.get('add_comment')): #submit button for comment
-                query.addComment(session['UID'],pid,request.form['comment_content'])
-                return redirect(url_for("posts/<pid>"))
-            if (request.POST.get('del_post')): #submit button for delete
-                if session['UID'] == query.get_uid_from_post(pid):
-                    query.delPost(pid)
-                return redirect(url_for("posts"))
+            return redirect(url_for("posts"))
 
 
 if __name__ == "__main__":
