@@ -7,25 +7,25 @@ app = Flask(__name__)
 @app.route("/home")
 def home():
     return render_template("home.html")
-    
+
 @app.route("/login", methods=["GET","POST"])
 def login(): #confirm uid and password exists
-        if request.method == "GET":
-            if 'logged_in' in session and session['logged_in']:
-                return redirect(url_for("posts"))
-            else:
-                return render_template("login.html")
+    if request.method == "GET":
+        if 'logged_in' in session and session['logged_in']:
+            return redirect(url_for("posts"))
         else:
-            assert(request.method == "POST")
-            username = request.form['uname']
-            password = request.form['pword']
-            if query.get_uid(username, password) != -1:
-                session['logged_in'] = True
-                session['UID'] = query.get_uid(username, password)
-                return redirect(url_for("posts"))
-            else:
-                session['logged_in'] = False
-                return render_template("login.html", error="User not in database. Need an account?") #we should put a link to the register page on login.html
+            return render_template("login.html")
+    else:
+        assert(request.method == "POST")
+        username = request.form['uname']
+        password = request.form['pword']
+        if query.get_uid(username, password) != -1:
+            session['logged_in'] = True
+            session['UID'] = query.get_uid(username, password)
+            return redirect(url_for("posts"))
+        else:
+            session['logged_in'] = False
+            return render_template("login.html", ERROR="User not in database. Need an account?")
 
 @app.route("/logout")
 def logout():
@@ -41,41 +41,36 @@ def register():
         query.register_user(request.form['uname'], request.form['pword'])
         return redirect(url_for("login"))
 
-@app.route("/profile/<uid>", methods=["GET","POST"]) #list of all user posts + most recent comments
+@app.route("/profile", methods=["GET","POST"])
+@app.route("/profile/", methods=["GET","POST"])
 def profile():
     postList = query.get_posts_by_user(session['UID']) #post ids
-    postDict = {}
-    ctr = 0
-    while ctr < len(postList):
-        d = query.get_post(postList[ctr]) # {"title":-, "contents":-, "username":-,}
+    postDict = []
+    for post in postList:
+        d = query.get_post(post) # {"title":-, "contents":-, "username":-,}
         title = d['title']
-        listOfComments = query.get_comments_for_post(postList[ctr])
-        lastInd = len(listOfComments) -1
-        topCommentID = listOfComments[lastInd]["comment_id"]
-        topCommentString = query.get_comment_contents(topCommentID)
-        postDict[postLIst[ctr]] = {'title':title, 'topComment':topCommentString}
-        ctr += 1
-    #retList in the format [ {"title":,"contents":,"username":,"last_comment":}, {...}]
-    return render_template("userposts.html", POST_LIST = postDict)
-    
-#add new posts here
-@app.route("/posts",methods=["GET","POST"]) #shows all posts, title + most recent comment. 
-def posts():
-    postList = query.get_all_pids(); #list of all pid's
-    postDict = {}
-    ctr = 0;
-    while ctr < len(postList):
-        title = query.get_post(postList[ctr])["title"] 
-        content = query.get_post(postList[ctr])["content"]
-        postDict = {}
-        try:
-            topCommentID = query.get_comments_for_post(postList[ctr])[0]["comment_id"]
+        listOfComments = query.get_comments_for_post(post)
+        topComment = ""
+        if len(listOfComments) > 0:
+            topCommentID = listOfComments[-1]["comment_id"]
             topComment = query.get_comment_contents(topCommentID)
-            postDict[postList[ctr]]={'pid':postList[ctr],'title':title,'topComment':topComment,'content':content}
-        except:
-            postDict = {'pid':postList[ctr], 'title':title, 'topComment': "",
-                    'content': content}
-        ctr += 1
+        postDict.append({'title':title, 'topComment':topComment})
+    return render_template("userposts.html", POST_LIST = postDict)
+
+#add new posts here
+@app.route("/posts",methods=["GET","POST"]) #shows all posts, title + most recent comment.
+def posts():
+    postList = query.get_all_pids()
+    postList.reverse()
+    postDict = []
+    for pid in postList:
+        title = query.get_post(pid)["title"] 
+        content = query.get_post(pid)["content"]
+        topComment = ""
+        if len(query.get_comments_for_post(pid)) > 0:
+            topCommentID = query.get_comments_for_post(pid)[0]["comment_id"]
+            topComment = query.get_comment_contents(topCommentID)
+        postDict.append({'pid':pid,'title':title,'topComment':topComment,'content':content})
     if request.method == "GET":
         #postDict format: {pid: {'title':, 'topComment':}, pid:{...}, ...}
         return render_template("allposts.html", POST_DICT = postDict)
@@ -92,21 +87,16 @@ def posts():
                 print("ERROR: NOT ADDED")
                 return redirect(url_for("posts"))
 
-        
 @app.route("/posts/<pid>", methods = ["GET","POST"]) #for individual posts
 def onepost(pid=-1):
     pid = int(pid)
     if len(query.get_post(pid)) == 0:
-            return redirect(url_for("posts"))
+        return redirect(url_for("posts"))
     else:
         if request.method == "GET":
-            commentList = query.get_comments_for_post(pid) #actually a dicitonary
-            ctr = 0;
-            while ctr < len(commentList):
-                x = query.get_comment_contents(commentList[ctr]["comment_id"])
-                commentList[ctr] = x
-                ctr += 1
-        #commentList is now a list of strings of the contents
+            commentList = query.get_comments_for_post(pid)
+            for comment in commentList:
+                comment["contents"] = query.get_comment_contents(comment["comment_id"])
             return render_template("post.html", POST_CONTENT = query.get_post(pid), COMMENT_LIST = commentList)
         else:
             assert(request.method == "POST")
@@ -117,7 +107,7 @@ def onepost(pid=-1):
                 if session['UID'] == query.get_uid_from_post(pid):
                     query.delPost(pid)
                 return redirect(url_for("posts"))
-                
+
 
 if __name__ == "__main__":
     app.secret_key = "plsfortheloveofgodletthiswork"

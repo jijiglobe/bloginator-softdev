@@ -309,4 +309,3 @@ def change_password(username, oldpass, newpass):
     conn.commit()
     conn.close()
 
-print get_comments_for_post(3);

@@ -1,94 +1,78 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="../../favicon.ico">
 
-        <title>Forchan95</title>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-        <!-- Bootstrap core CSS -->
-        <link href= "{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <title>Forchan95</title>
 
-        <!-- Custom styles for this template -->
-        <link href="{{ url_for('static', filename='posts.css')}}" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='posts.css')}}" rel="stylesheet">
 
 
-        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+</head>
 
-    </head>
-    <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button
-                     type="button" class="navbar-toggle
-                     collapsed" data-toggle="collapse"
-                                data-target="#navbar"
-                                aria-expanded="false"
-                                aria-controls="navbar">
-                        <span
-                                class="sr-only">Toggle
-                                navigation</span>
-                        <span
-                                class="icon-bar"></span>
-                        <span
-                                class="icon-bar"></span>
-                        <span
-                                class="icon-bar"></span>
-                    </button>
-                </div>
-                <div
-                                id="navbar"
-                                class="navbar-collapse
-                                collapse">
-                    <ul
-                                class="nav
-                                navbar-nav
-                                navbar-right">
-                        <li><a
-                                href="/logout">Log
-                                Out</a></li>
-                    </ul>
-                </div>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle
+                     collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation
+                    </span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
             </div>
-        </nav>
-        <br>
-        <br>
-        <center>
-            <img src="{{url_for('static',filename='forchan.png')}}">
-        </center>
-        <p>
-        {% for post in POST_DICT %}
-        <div class="title">
-            <a href="/posts/{{POST_DICT[POST_DICT|length - post|int - 1]['pid']}}">
-                {{POST_DICT[POST_DICT|length - post - 1]['title']}}
-            </a>
-            <div class="content">
-                {{POST_DICT[POST_DICT|length - post|int - 1]['content']}}
-                <div class = "comment">
-                    {{POST_DICT[POST_DICT|length - post|int - 1]['topComment']}}
-                </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/logout">Log Out</a></li>
+                </ul>
             </div>
         </div>
+    </nav>
+    <br>
+    <br>
+    <center>
+        <img src="{{url_for('static',filename='forchan.png')}}" alt="logo">
+    </center>
+    <form method="POST">
+        <h2> Title: </h2>
+        <br>
+        <input style="height:40px; width:100%" type="text" name="title" id="title">
+        <br>
+        <h2> Content: </h2>
+        <br>
+        <textarea style="height:200px; width:100%" rows="10" name="content" id="content"></textarea>
         <br>
         <br>
-        {% endfor %}
-        </p>
-        <form method="POST">
-            <h2> Title: </h2>
-            <br>
-            <input style="height:40px; width:100%" type="text" name="title" id="title">
-            <br>
-            <h2> Content: </h2>
-            <br>
-            <textarea style="height:200px; width:100%" rows="10" name="content" id="content"></textarea>
-            <br>
-            <br>
-            <button name="newpost" id="newpost" class="btn btn-lg btn-primary btn-block" type="submit"> New Post </button>
-        </form>
-    </body>
+        <button name="newpost" id="newpost" class="btn btn-lg btn-primary btn-block" type="submit"> New Post </button>
+    </form>
+    <br>
+    {% for post in POST_DICT %}
+    <div class="title">
+        <b><a href="/posts/{{post['pid']}}">{{post['title']}}</a></b>
+        <div class="content">
+            <p>{{post['content']}}</p>
+            {% if post['topComment'] != "" %}
+            <div class="comment">
+                {{post['topComment']}}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <br> {% endfor %}
+</body>
+
 </html>

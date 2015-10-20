@@ -3,12 +3,22 @@ body {
   padding-bottom: 10px;
   padding-left: 30px;
   padding-right:30px;
-  background-color: #eee;
+  background-color: #EEE;
 }
 .title{
-    padding-bottom: 10px;
-    font-size: 40px;
-    background-color: #FFFFFF;
+    padding-bottom: 5px;
+    padding-top: 3px;
+    padding-left: 15px;
+    font-size: 44px;
+    border-radius: 25px;
+    background-color: #DDD;
+}
+
+.author{
+    padding-bottom: 2px;
+    padding-top: 2px;
+    padding-left: 8px;
+    font-size: 15px;
 }
 
 .content{
@@ -16,7 +26,7 @@ body {
     padding-top: 10px;
     padding-left: 20px;
     padding-right:20px;
-    font-size: 15px;
+    font-size: 20px;
 }
 
 .comment{
@@ -24,5 +34,11 @@ body {
     padding-left: 30px;
     padding-right: 30px;
     font-size: 15px;
+}
+
+.standalone-comment{
+    padding-top: 0px;
+    padding-left: 10px;
+    font-size: 17px;
 }
 
