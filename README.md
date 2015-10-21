@@ -13,13 +13,19 @@ Bloginator Assignment for Software Development Class
 
 ## Checklist
 
- - [ ] Backend Completion By 10-13-15
- - [ ] Middleware Completion By 10-13-15
- - [ ] UX Completion By 10-14-15
- - [ ] Beta Test Day, Bug fixes, code cleanup, etc. 10-15-15
- - [ ] Deploy!
+ - [X] Backend Completion By 10-13-15
+ - [X] Middleware Completion By 10-13-15
+ - [X] UX Completion By 10-14-15
+ - [X] Beta Test Day, Bug fixes, code cleanup, etc. 10-15-15
+ - [X] Deploy!
 
 ## Using the project
 
-TODO: On Beta Test Day
+Run the project with `python app.py`
+
+The project can be accessed on `localhost:8000` in your web browser.
+
+## NOTES
+
+When viewing a post, click the logo to go back to the main post page
 
