@@ -1,101 +1,50 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="../../favicon.ico">
+{% extends "template.html" %} 
+{% block head %}
+<title>Forchan95</title>
+<!-- Bootstrap core CSS -->
+<link href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="{{ url_for('static', filename='posts.css')}}" rel="stylesheet">
+<script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+{% endblock %}
 
-        <title>Forchan95</title>
-
-        <!-- Bootstrap core CSS -->
-        <link href= "{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
-
-        <!-- Custom styles for this template -->
-        <link href="{{ url_for('static', filename='posts.css')}}" rel="stylesheet">
-
-
-        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
-    </head>
-    <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button
-                     type="button"
-                     class="navbar-toggle
-                     collapsed"
-                     data-toggle="collapse"
-                     data-target="#navbar"
-                     aria-expanded="false"
-                     aria-controls="navbar">
-                        <span
-                     class="sr-only">Toggle
-                     navigation</span>
-                        <span
-                     class="icon-bar"></span>
-                        <span
-                     class="icon-bar"></span>
-                        <span
-                     class="icon-bar"></span>
-                    </button>
-                </div>
-                <div
-                     id="navbar"
-                     class="navbar-collapse
-                     collapse">
-                    <ul
-                     class="nav
-                     navbar-nav
-                     navbar-right">
-                        <li><a
-                     href="/logout">Log
-                     Out</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <br>
-        <br>
-        <center>
-            <a href="/posts"><img
-               src="{{url_for('static',filename='forchan.png')}}"></a>
-        </center>
-        <p>
-        <div class="title">
-            <b>{{ POST_CONTENT["title"] }}</b>
-            <div class="author">
-                by {{ POST_CONTENT["username"] }}
-            </div>
-            <div class="content">
-                {{ POST_CONTENT["content"] }}
-            </div>
+{% block body %}
+<br>
+<br>
+<center>
+    <a href="/posts"><img src="{{url_for('static',filename='forchan.png')}}"></a>
+</center>
+<p>
+    <div class="title">
+        <b>{{ POST_CONTENT["title"] }}</b>
+        <div class="author">
+            by {{ POST_CONTENT["username"] }}
         </div>
-        <hr>
-        <form method="POST">
-            <h2> New Comment: </h2>
-            <br>
-            <textarea style="height:200px; width:100%" rows="10" name="comment_content" id="comment_content"></textarea>
-            <br>
-            <br>
-            <button name="add_comment" id="add_comment" class="btn btn-lg btn-primary btn-block" type="submit"> Comment </button>
-        </form>
-        <h2> Comments: </h2>
-        {% for comment in COMMENT_LIST %}
-        <div class="title">
-            <div class = "standalone-comment">
-                {{ comment["contents"] }}
-            </div>
-            <div class = "author">
-                <b>Comment by:</b> {{ comment["commenter"] }}
-            </div>
+        <div class="content">
+            {{ POST_CONTENT["content"] }}
         </div>
+    </div>
+    <hr>
+    <form method="POST">
+        <h2> New Comment: </h2>
+        <br>
+        <textarea style="height:200px; width:100%" rows="10" name="comment_content" id="comment_content"></textarea>
         <br>
         <br>
-        {% endfor %}
-        </p>
-    </body>
+        <button name="add_comment" id="add_comment" class="btn btn-lg btn-primary btn-block" type="submit"> Comment </button>
+    </form>
+    <h2> Comments: </h2> {% for comment in COMMENT_LIST %}
+    <div class="title">
+        <div class="standalone-comment">
+            {{ comment["contents"] }}
+        </div>
+        <div class="author">
+            <b>Comment by:</b> {{ comment["commenter"] }}
+        </div>
+    </div>
+    <br>
+    <br> {% endfor %}
+</p>
+{% endblock %}
+
 </html>
