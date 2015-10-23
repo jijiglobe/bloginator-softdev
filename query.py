@@ -4,15 +4,18 @@ from pymongo import MongoClient
 # connection = MongoClient('hostname')
 connection = MongoClient()
 
+db = connection.blog
+user = db.user
+post = db.post
+comment = db.comment
 # To authenticate after connecting
 # db = connection.admin
 # db.authenticate('username','password')
 
-db = connection['blog']
-
+#????
 def get_next_uid():
-    
-    return
+    allUid = user.find({"uid":True}).sort({"uid":-1})
+    return allUid[0]["uid"]
 
 def get_next_cid():
     
