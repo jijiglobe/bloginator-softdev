@@ -11,27 +11,38 @@ connection = MongoClient()
 db = connection['blog']
 
 def get_next_uid():
-    
-    return
+    totalUsers=db.user.count({})
+    i=0
+    for i in range(totalUsers+1):
+        i++
+    return i
 
 def get_next_cid():
-    
-    return
+    totalComments=db.comment.count({})
+    i=0
+    for i in range(totalComments+1):
+        i++
+    return i 
 
 
 def get_next_pid():
-    
-    return
+    totalPosts = db.post.count({})
+    i=0
+    for i in range(totalPosts+1):
+        i++
+    return i
 
 
 def register_user(username, password):
-    
+    d = {'uid':get_next_uid(), 'username':username, 'password':password}
+    db.user.insert(d)
     return
 
 
 def get_post(pid):
-
-    return
+    d = db.post.find({'pid':pid})
+    post = d.content
+    return post
 
 
 def get_posts_by_user(uid):
