@@ -4,18 +4,26 @@ from pymongo import MongoClient
 # connection = MongoClient('hostname')
 connection = MongoClient()
 
+db = connection.blog
+user = db.user
+post = db.post
+comment = db.comment
 # To authenticate after connecting
 # db = connection.admin
 # db.authenticate('username','password')
 
-db = connection['blog']
-
+#????
 def get_next_uid():
+<<<<<<< HEAD
     totalUsers=db.user.count({})
     i=0
     for i in range(totalUsers+1):
         i++
     return i
+=======
+    allUid = user.find({"uid":True}).sort({"uid":-1})
+    return allUid[0]["uid"]
+>>>>>>> 74a08364f602597972653a32800c34e6207a258e
 
 def get_next_cid():
     totalComments=db.comment.count({})
