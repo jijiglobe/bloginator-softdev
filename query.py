@@ -14,22 +14,19 @@ comment = db.comment
 
 #????
 def get_next_uid():
-<<<<<<< HEAD
     totalUsers=db.user.count({})
     i=0
     for i in range(totalUsers+1):
-        i++
+        i += 1
     return i
-=======
-    allUid = user.find({"uid":True}).sort({"uid":-1})
-    return allUid[0]["uid"]
->>>>>>> 74a08364f602597972653a32800c34e6207a258e
+    #allUid = user.find({"uid":True}).sort({"uid":-1})
+    #return allUid[0]["uid"]
 
 def get_next_cid():
     totalComments=db.comment.count({})
     i=0
     for i in range(totalComments+1):
-        i++
+        i+=1
     return i 
 
 
@@ -37,7 +34,7 @@ def get_next_pid():
     totalPosts = db.post.count({})
     i=0
     for i in range(totalPosts+1):
-        i++
+        i+=1
     return i
 
 
