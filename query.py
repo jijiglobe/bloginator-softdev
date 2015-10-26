@@ -83,11 +83,11 @@ def get_comment_contents(cid):
     return comment.find({"cid":cid}, {"content":True})
 
 def authenticate(username):
-    user.find({"username":username}
-    return
+    result = user.find({"username":username})
+    return result != 
 
 def get_uid(username, password):
-    return
+    return user.find({$and [{"username":username},{"password":password}]},{"uid":True})
 
 def addPost(uid, title, content):
     return
