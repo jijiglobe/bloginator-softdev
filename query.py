@@ -72,17 +72,18 @@ def get_user(uid):
     return user.find({"uid":uid},{"username":True})
 
 def get_comments_for_user(uid):
-    userComments = comment.find({"uid":uid})
-    i = len(userComments) - 1
-    while i >= 0:
-        userComments[i] = userComments[i][0]
-        i-=1
+    userComments = comment.find({"uid":uid},{"content":True})
+    #i = len(userComments) - 1
+    #while i >= 0:
+    #userComments[i] = userComments[i][0]
+    #i-=1
     return userComments
 
 def get_comment_contents(cid):
-    return
+    return comment.find({"cid":cid}, {"content":True})
 
 def authenticate(username):
+    user.find({"username":username}
     return
 
 def get_uid(username, password):
