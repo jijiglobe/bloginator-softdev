@@ -49,15 +49,35 @@ def get_post(pid):
     post = d.content
     return post
 
-
+#IDK WHAT DOES FIND EVEN RETURN
 def get_posts_by_user(uid):
-    return
+    userPosts = post.find({"uid":uid},{"pid":True})
+    i = len(userPosts) - 1
+    while (i >= 0 ):
+        userPosts[i] = userPosts[i][0]
+        i-=1
+    return userPosts 
 
 def get_comments_for_post(pid):
-    return
+    postComments = comments.find({"pid":pid},{"uid": True, "content":True})
+    i = len(postComments) - 1
+    while i >= 0:
+        postComments[i] = {'commenter': str(get_user(postComments[i][0])),
+                           'comment_id': postComments[i][1],
+                           'commenter_id': postComments[i][2]}
+        i-=1
+    return postComments
+
+def get_user(uid):
+    return user.find({"uid":uid},{"username":True})
 
 def get_comments_for_user(uid):
-    return
+    userComments = comment.find({"uid":uid})
+    i = len(userComments) - 1
+    while i >= 0:
+        userComments[i] = userComments[i][0]
+        i-=1
+    return userComments
 
 def get_comment_contents(cid):
     return
