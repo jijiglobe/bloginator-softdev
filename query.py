@@ -90,15 +90,21 @@ def get_uid(username, password):
     return user.find({$and [{"username":username},{"password":password}]},{"uid":True})
 
 def addPost(uid, title, content):
+    d= {'uid':uid,'title':title,'content':content}
+    db.post.insert(d)
     return
 
 def addComment(uid, pid, content):
+    d= {'uid':uid,'pid':pid,'content':content}
+    db.comments.insert(d)
     return
 
 def delPost(pid):
+    db.post.remove({'pid':pid})
     return
 
 def delComment(cid):
+    db.comments.remove({'cid':cid})
     return
 
 def comments_contents_for_user(uid):
