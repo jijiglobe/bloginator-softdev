@@ -84,18 +84,22 @@ def get_comment_contents(cid):
 
 def authenticate(username):
     result = user.find({"username":username})
-    return result != 
+    return result==username
 
 def get_uid(username, password):
-    return user.find({$and [{"username":username},{"password":password}]},{"uid":True})
+    d = user.find({$and [{"username":username},{"password":password}]},{"uid":True})
+    
+    
 
 def addPost(uid, title, content):
-    d= {'uid':uid,'title':title,'content':content}
+    pid = get_next_pid()
+    d= {'pid':pid,'uid':uid,'title':title,'content':content}
     db.post.insert(d)
     return
 
 def addComment(uid, pid, content):
-    d= {'uid':uid,'pid':pid,'content':content}
+    cid = get_next_cid()
+    d= {'cid':cid,'uid':uid,'pid':pid,'content':content}
     db.comments.insert(d)
     return
 
@@ -114,15 +118,22 @@ def get_all_pids():
     return
 
 def get_uid_from_post(pid):
-    return
+    d=db.post.find({'pid'=pid})
+    result = d['uid']
+    return result
 
 def get_uid_from_comment(cid):
-    return
+    d=db.comment.find({'cid'=cid})
+    result = d['uid']
+    return result
 
 def get_pid_from_comment(cid):
-    return
+    d = db.comment.find({'cid'=cid})
+    result = d['pid']
+    return result
 
 def change_password(username, oldpass, newpass):
+    uid = get_uid(username,oldpass)
     return
 
 
