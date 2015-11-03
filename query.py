@@ -107,11 +107,11 @@ def delComment(cid):
     db.comments.remove({'cid':cid})
     return
 
-def comments_contents_for_user(uid):
-    return
+def comments_contents_for_user(pid):
+    return db.post.comments.find({'pid' : pid}, {pid : 0, _id : 0,content = 1})
 
 def get_all_pids():
-    return
+    return db.post.find({},{_id : 0, pid : 1})
 
 def get_uid_from_post(pid):
     return
