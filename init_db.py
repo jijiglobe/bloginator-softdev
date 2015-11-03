@@ -1,4 +1,4 @@
-import sqlite3
+"""import sqlite3
 
 conn = sqlite3.connect("blog.db")
 
@@ -15,4 +15,4 @@ c.execute(q)
 
 conn.commit()
 conn.close()
-
+"""
