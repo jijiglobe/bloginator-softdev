@@ -91,16 +91,20 @@ def get_comments_for_user(uid):
     #while i >= 0:
     #userComments[i] = userComments[i][0]
     #i-=1
-    return userComments
+    ans = []
+    for x in userComments:
+        ans.append[x["cid"]]
+    return ans
 
 # Returns a string containing the content for the comment specified by cid
 def get_comment_contents(cid):
-    return comment.find({"cid":cid}, {"content":True})
+    comment = comment.find({"cid":cid}, {"content":True})
+    return comment["content"]
 
 
 def authenticate(username):
     result = user.find({"username":username})
-    return result != 
+    return #result["password"] == 
 
 # Returns UID based on username and password
 def get_uid(username, password):
@@ -116,7 +120,7 @@ def addPost(uid, title, content):
 
 #Adds new Comment to Post
 def addComment(uid, pid, content):
-    d= {'uid':uid,'pid':pid,'content':content}
+    d= {'uid':uid,'pid':pid,'content':content,"cid":get_next_cid()}
     db.comments.insert(d)
     return
 
