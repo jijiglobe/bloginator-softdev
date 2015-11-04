@@ -1,4 +1,5 @@
 import random
+import pymongo
 from pymongo import MongoClient
 
 # connection = MongoClient('hostname')
@@ -50,7 +51,6 @@ def register_user(username, password):
 #   "title"     A string with the title of the post
 #   "contents"  A string with the contents of the post
 #   "username"  A string with the username of the poster                                                                             
-def get_post(pid):
 def get_post(pid):
     d = db.post.find({'pid':pid})
     post = d.content
@@ -108,8 +108,13 @@ def authenticate(username):
 
 # Returns UID based on username and password
 def get_uid(username, password):
-    return user.find({$and [{"username":username},{"password":password}]},{"uid":True})
-
+    result == user.find({"username":username},{"uid":True, "password":True})
+    if result is None:
+        return -1
+    if result[password] == password:
+        return result[uid]
+    else:
+        return -1
 
 #Adds new Post
 def addPost(uid, title, content):
@@ -136,7 +141,7 @@ def delComment(cid):
 
 #gets all comment content for a post
 def comments_contents_for_user(pid):
-    return db.post.comments.find({'pid' : pid}, {pid : 0, _id : 0,content = 1})
+    return db.post.comments.find({'pid' : pid}, {pid : 0, _id : 0, content : 1})
 
 #gets a list of all pids
 def get_all_pids():
