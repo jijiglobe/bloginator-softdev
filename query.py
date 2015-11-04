@@ -74,7 +74,7 @@ def get_posts_by_user(uid):
 #       "comment_id"
 #       "commenter_id" 
 def get_comments_for_post(pid):
-    postComments = db.comments.find({"pid":pid},{"uid": True, "content":True})
+    postComments = db.comments.find({"pid":pid})
     result=[]
     for r in postComments:
         if r.has_key('cid'):
@@ -89,7 +89,7 @@ def get_user(uid):
 # Returns: a list of comment ids made by the user specified by uid
 #   Each element of the list should be an integer that is the comment id
 def get_comments_for_user(uid):
-    userComments = comments.find({"uid":uid},{"content":True})
+    userComments = db.comments.find({"uid":uid},{"content":True})
     ans = []
     for x in userComments:
         ans.append[x["cid"]]
@@ -97,7 +97,7 @@ def get_comments_for_user(uid):
 
 # Returns a string containing the content for the comment specified by cid
 def get_comment_contents(cid):
-    comment = comments.find_one({"cid":cid}, {"content":True})
+    comment = db.comments.find_one({"cid":cid})
     return comment["content"]
 
 

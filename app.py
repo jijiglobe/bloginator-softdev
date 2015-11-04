@@ -68,7 +68,7 @@ def posts():
         title = query.get_post(pid)['title'] 
         content = query.get_post(pid)["content"]
         topComment = ""
-        if query.get_comments_for_post(pid).count(True) > 0:
+        if len(query.get_comments_for_post(pid)) > 0:
             topCommentID = query.get_comments_for_post(pid)[0]["comment_id"]
             topComment = query.get_comment_contents(topCommentID)
         postDict.append({'pid':pid,'title':title,'topComment':topComment,'content':content})
