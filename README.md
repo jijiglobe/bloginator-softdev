@@ -13,8 +13,8 @@ Bloginator assignment re-written using mongodb instead of sqlite and added templ
 
 ## Checklist
 
- - [X] Template Inheritance Completion By 10-23-15
- - [X] Database FunctionS Completion By 11-03-15
+ - [X] Template Inheritance 10-23-15
+ - [X] Database Function 11-03-15
  - [X] Testing 11-04-15
 
 ## Using the project
