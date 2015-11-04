@@ -112,7 +112,7 @@ def get_uid(username, password):
         return -1
     if result['password'] == password:
             return result['uid']
-            #return 1
+        #return 1
     else:
         return -1
 
