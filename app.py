@@ -1,5 +1,5 @@
 from flask import Flask, render_template, session, redirect, request, url_for
-import query
+import pymongo, query
 
 app = Flask(__name__)
 
