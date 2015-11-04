@@ -52,9 +52,11 @@ def register_user(username, password):
 #   "contents"  A string with the contents of the post
 #   "username"  A string with the username of the poster                                                                             
 def get_post(pid):
-    d = db.post.find({'pid':pid})
-    post = d.content
-    return post
+    d = db.post.find_one({'pid':pid})
+    '''post=''
+    for r in d:
+        post = d['content']'''
+    return d
 
 #IDK WHAT DOES FIND EVEN RETURN
 # Returns: a list of post ids made by the user specified by uid
@@ -71,8 +73,8 @@ def get_post(pid):
 #       "comment_id"
 #       "commenter_id" 
 def get_comments_for_post(pid):
-    postComments = comments.find({"pid":pid},{"uid": True, "content":True})
-    i = len(postComments) - 1
+    postComments = db.comments.find({"pid":pid},{"uid": True, "content":True})
+    i = postComments.count(True) - 1
     while i >= 0:
         postComments[i] = {'commenter': str(get_user(postComments[i][0])),
                            'comment_id': postComments[i][1],
@@ -108,17 +110,18 @@ def authenticate(username):
 
 # Returns UID based on username and password
 def get_uid(username, password):
-    result == user.find({"username":username},{"uid":True, "password":True})
+    result = user.find_one({"username":username},{"uid":True, "password":True})
     if result is None:
         return -1
     if result[password] == password:
-        return result[uid]
+        return result['uid']
+        #return 1
     else:
         return -1
 
 #Adds new Post
 def addPost(uid, title, content):
-    d= {'uid':uid,'title':title,'content':content}
+    d= {'pid':get_next_pid(),'uid':uid,'title':title,'content':content}
     db.post.insert(d)
     return
 
@@ -145,7 +148,13 @@ def comments_contents_for_user(pid):
 
 #gets a list of all pids
 def get_all_pids():
-    return db.post.find({},{_id : 0, pid : 1})
+    #return db.post.find({},{'_id' : 0, 'pid' : 1})
+    d= db.post.find({})
+    result=[]
+    for r in d:
+        if r.has_key('pid'):
+            result+=[r['pid']]
+    return result
 
 #gets the uid of a post with this.pid==pid
 def get_uid_from_post(pid):
@@ -155,7 +164,6 @@ def get_uid_from_post(pid):
 
 #gets the uid of a comment with this.cid=cid
 def get_uid_from_comment(cid):
-    post = db.
     return
 
 #gets the pid of a comment with this.cid=cid
