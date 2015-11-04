@@ -1,23 +1,21 @@
 # bloginator-softdev
 
-Bloginator Assignment for Software Development Class
+Bloginator assignment re-written using mongodb instead of sqlite and added template inheritance from template.html
 
 ## Team
 
-| Name          | Role(s)             |
-| ------------- | ------------------- |
-| Ethan Cheng   | Leader, UX Design   |
-| Ho Yin Ho     | Backend (DB Design) |
-| Kah Soon Yap  | Backend (DB Design) |
-| Sarah Joseph  | Middleware          |
+| Name          |
+| ------------- |
+| Boying Tang   |
+| Jion Fairchild|
+| Javis Wu      |
+| Chris Liang   |
 
 ## Checklist
 
- - [X] Backend Completion By 10-13-15
- - [X] Middleware Completion By 10-13-15
- - [X] UX Completion By 10-14-15
- - [X] Beta Test Day, Bug fixes, code cleanup, etc. 10-15-15
- - [X] Deploy!
+ - [X] Template Inheritance Completion By 10-23-15
+ - [X] Database FunctionS Completion By 11-03-15
+ - [X] Testing 11-04-15
 
 ## Using the project
 
