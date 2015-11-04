@@ -53,8 +53,8 @@ def register_user(username, password):
 #def get_post(pid):
 def get_post(pid):
     d = db.post.find({'pid':pid})
-    #post = d.content
-    return d
+    post = d[content]
+    return post
 
 #IDK WHAT DOES FIND EVEN RETURN
 # Returns: a list of post ids made by the user specified by uid
@@ -102,7 +102,7 @@ def get_comments_for_user(uid):
 # Returns a string containing the content for the comment specified by cid
 def get_comment_contents(cid):
     d=comment.find({"cid":cid}, {"content":True})
-    return d.content
+    return d['content']
 
 
 def authenticate(username):
