@@ -26,7 +26,7 @@ def get_next_uid():
 
 #Returns next available cid                                                                                                         
 def get_next_cid():
-    totalComments=db.comment.count({})
+    totalComments=db.comments.count({})
     """i=0
     for i in range(totalComments+1):
         i+=1
@@ -60,13 +60,14 @@ def get_post(pid):
 
 #IDK WHAT DOES FIND EVEN RETURN
 # Returns: a list of post ids made by the user specified by uid
-#   Each element of the list should be an integer containing the pid of the post def get_posts_by_user(uid):
+#   Each element of the list should be an integer containing the pid of the pos 
+def get_posts_by_user(uid):
     userPosts = post.find({"uid":uid},{"pid":True})
-    i = len(userPosts) - 1
-    while (i >= 0 ):
-        userPosts[i] = userPosts[i][0]
-        i-=1
-    return userPosts 
+    result=[]
+    for r in userPosts:
+        if r.has_key('pid'):
+            result+=[r['pid']]
+    return result 
 # Returns: a list of dictionaries of all the posts
 #   Each element of the list should be a dictionary containing the keys:
 #       "commenter"
@@ -74,14 +75,12 @@ def get_post(pid):
 #       "commenter_id" 
 def get_comments_for_post(pid):
     postComments = db.comments.find({"pid":pid},{"uid": True, "content":True})
-    i = postComments.count(True) - 1
     result=[]
     for r in postComments:
         if r.has_key('cid'):
             result+=[ {'commenter': get_user(r['uid']),
                                'comment_id': r['cid'],
                                'commenter_id': r['uid']}]
-            i-=1
     return result
 
 def get_user(uid):
@@ -90,11 +89,7 @@ def get_user(uid):
 # Returns: a list of comment ids made by the user specified by uid
 #   Each element of the list should be an integer that is the comment id
 def get_comments_for_user(uid):
-    userComments = comment.find({"uid":uid},{"content":True})
-    #i = len(userComments) - 1
-    #while i >= 0:
-    #userComments[i] = userComments[i][0]
-    #i-=1
+    userComments = comments.find({"uid":uid},{"content":True})
     ans = []
     for x in userComments:
         ans.append[x["cid"]]
@@ -102,7 +97,7 @@ def get_comments_for_user(uid):
 
 # Returns a string containing the content for the comment specified by cid
 def get_comment_contents(cid):
-    comment = comment.find({"cid":cid}, {"content":True})
+    comment = comments.find_one({"cid":cid}, {"content":True})
     return comment["content"]
 
 
@@ -124,7 +119,7 @@ def get_uid(username, password):
 
 #Adds new Post
 def addPost(uid, title, content):
-    d= {'pid':get_next_pid(),'uid':uid,'title':title,'content':content}
+    d= {'pid':get_next_pid(),'uid':uid,'title':title,'content':content,'username':get_user(uid)}
     db.post.insert(d)
     return
 
@@ -161,9 +156,8 @@ def get_all_pids():
 
 #gets the uid of a post with this.pid==pid
 def get_uid_from_post(pid):
-    post = db.posts.find({"pid":pid})
-    for x in post:
-        return x["uid"]
+    post = db.post.find({"pid":pid})
+    return post['uid']
 
 #gets the uid of a comment with this.cid=cid
 def get_uid_from_comment(cid):
