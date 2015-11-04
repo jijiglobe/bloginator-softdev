@@ -75,15 +75,17 @@ def get_post(pid):
 def get_comments_for_post(pid):
     postComments = db.comments.find({"pid":pid},{"uid": True, "content":True})
     i = postComments.count(True) - 1
-    while i >= 0:
-        postComments[i] = {'commenter': str(get_user(postComments[i][0])),
-                           'comment_id': postComments[i][1],
-                           'commenter_id': postComments[i][2]}
-        i-=1
-    return postComments
+    result=[]
+    for r in postComments:
+        if r.has_key('cid'):
+            result+=[ {'commenter': get_user(r['uid']),
+                               'comment_id': r['cid'],
+                               'commenter_id': r['uid']}]
+            i-=1
+    return result
 
 def get_user(uid):
-    return user.find({"uid":uid},{"username":True})
+    return user.find_one({"uid":uid},{"username":True})['username']
 
 # Returns: a list of comment ids made by the user specified by uid
 #   Each element of the list should be an integer that is the comment id
@@ -113,9 +115,10 @@ def get_uid(username, password):
     result = user.find_one({"username":username},{"uid":True, "password":True})
     if result is None:
         return -1
-    if result[password] == password:
-        return result['uid']
-        #return 1
+    if result.has_key(password):
+        if result[password] == password:
+            return result['uid']
+            #return 1
     else:
         return -1
 
