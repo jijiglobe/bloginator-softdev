@@ -110,10 +110,10 @@ def get_uid(username, password):
     result = user.find_one({"username":username},{"uid":True, "password":True})
     if result is None:
         return -1
-    if result.has_key(password):
-        if result[password] == password:
+    if result.has_key("password"):
+        if result["password"] == password:
             return result['uid']
-            #return 1
+        #return 1
     else:
         return -1
 
