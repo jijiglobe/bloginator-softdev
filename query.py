@@ -111,8 +111,8 @@ def authenticate(username):
 
 # Returns UID based on username and password
 def get_uid(username, password):
-    d= user.find({"$and":[{"username":username},{"password":password}]})
-    return d.uid
+    d= db.user.find({"$and":[{"username":username},{"password":password}]}).uid
+    return d
     
 
 #Adds new Post
