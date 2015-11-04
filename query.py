@@ -6,9 +6,9 @@ from pymongo import MongoClient
 connection = MongoClient()
 
 db = connection.blog
-user = db.user
-post = db.post
-comment = db.comment
+#user = db.user
+#post = db.post
+#comment = db.comment
 # To authenticate after connecting
 # db = connection.admin
 # db.authenticate('username','password')
@@ -84,7 +84,7 @@ def get_comments_for_post(pid):
     return result
 
 def get_user(uid):
-    return user.find_one({"uid":uid},{"username":True})['username']
+    return db.user.find_one({"uid":uid},{"username":True})['username']
 
 # Returns: a list of comment ids made by the user specified by uid
 #   Each element of the list should be an integer that is the comment id
@@ -107,11 +107,10 @@ def authenticate(username):
 
 # Returns UID based on username and password
 def get_uid(username, password):
-    result = user.find_one({"username":username},{"uid":True, "password":True})
-    if result is None:
+    result = db.user.find_one({"username":username})
+    if result == None:
         return -1
-    if result.has_key(password):
-        if result[password] == password:
+    if result['password'] == password:
             return result['uid']
             #return 1
     else:
